@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Editor</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/codemirror.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/theme/dracula.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/mode/markdown/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <style>
+        .container-fluid {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .content {
+            flex: 1;
+            display: flex;
+        }
+        .column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .editor, .output {
+            height: 100%;
+            overflow-y: auto;
+        }
+        .CodeMirror {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>Markdown Editor</h1>
+            </div>
+        </div>
+        <div class="row content mt-4">
+            <div class="col-md-6 column">
+                <h2>Markdown Input</h2>
+                <textarea id="markdown" class="form-control editor"># Markdown Tutorial
+
+Markdown is a lightweight markup language that you can use to add formatting elements to plaintext text documents. Here's a quick guide to get you started.
+
+## Headings
+
+You can create headings by starting a line with one or more `#` followed by a space. The number of `#` symbols indicates the heading level.
+
+
+# This is an H1
+## This is an H2
+### This is an H3
+
+
+## Emphasis
+
+To italicize text, use one `*` or `_` around the text. For bold text, use two `*` or `_`.
+
+
+*italic* or _italic_
+
+**bold** or __bold__
+
+
+## Lists
+
+### Unordered Lists
+
+Use `-`, `*`, or `+` to create an unordered list.
+
+
+- Item 1
+- Item 2
+  - Subitem 1
+  - Subitem 2
+
+
+### Ordered Lists
+
+Use numbers followed by a period to create an ordered list.
+
+
+1. First item
+2. Second item
+3. Third item
+
+
+## Links
+
+To create a hyperlink, enclose the link text in brackets `[ ]`, and then follow it immediately with the URL in parentheses `( )`.
+
+
+[OpenAI](https://www.openai.com)
+
+
+## Images
+
+Similar to links, but add an exclamation mark `!` before the brackets.
+
+
+![Alt text](https://icons.iconarchive.com/icons/iconarchive/rocking-horse/256/Rocking-Horse-Wood-icon.png)
+
+
+## Blockquotes
+
+Use `>` to create blockquotes.
+
+
+> This is a blockquote.
+> It can span multiple lines.
+
+
+## Code
+
+Enclose inline code within backticks `` ` ``.
+
+
+Here is some `inline code`.
+
+For blocks of code, use three backticks ``` or indent lines with four spaces.
+
+
+```python
+def hello_world():
+    print("Hello, world!")
+```
+
+## Horizontal Rules
+
+Create a horizontal rule by using three or more hyphens, asterisks, or underscores on a line by themselves.
+
+---
+***
+___
+
+## Tables
+
+Create tables using pipes `|` and hyphens `-` to separate columns and rows.
+
+| Header 1 | Header 2 |
+| -------- | -------- |
+| Row 1    | Data 1   |
+| Row 2    | Data 2   |
+  
+  
+That's it! You now know the basics of Markdown. Happy writing!
+</textarea>
+            </div>
+            <div class="col-md-6 column">
+                <h2>Rendered Output</h2>
+                <div id="rendered" class="border p-3 output"></div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12 text-center">
+                <button id="download" class="btn btn-primary">Download as PDF</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const markdownInput = CodeMirror.fromTextArea(document.getElementById('markdown'), {
+            mode: 'markdown',
+            lineNumbers: true,
+            theme: 'dracula',
+        });
+        const renderedOutput = document.getElementById('rendered');
+        const downloadButton = document.getElementById('download');
+
+        marked.setOptions({
+            highlight: function(code, lang) {
+                const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+                return hljs.highlight(code, { language }).value;
+            }
+        });
+
+        function updateRenderedOutput() {
+            const markdownText = markdownInput.getValue();
+            const htmlContent = marked.parse(markdownText);
+            renderedOutput.innerHTML = htmlContent;
+        }
+
+        markdownInput.on('change', updateRenderedOutput);
+
+        downloadButton.addEventListener('click', () => {
+            const element = document.createElement('div');
+            element.innerHTML = renderedOutput.innerHTML;
+            const opt = {
+                margin: [1, 1, 1, 1], // top, left, bottom, right (in inches)
+                filename: 'markdown.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        });
+
+        // Initial render
+        updateRenderedOutput();
+    </script>
+</body>
+</html>
