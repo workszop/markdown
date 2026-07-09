@@ -85,6 +85,48 @@
         .edu-btn:hover { background: var(--marigold-600); }
         .edu-btn:active { transform: scale(.96); }
         .edu-btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+        /* --- Markdown basics panel (toggleable) --- */
+        .guide-toggle {
+            font-family: var(--font-mono); font-weight: 500; font-size: 12px;
+            letter-spacing: .08em; text-transform: uppercase;
+            color: var(--teal-ink); background: var(--teal-soft);
+            border: none; border-radius: var(--r-pill); padding: 8px 16px;
+            cursor: pointer; transition: background .15s ease;
+        }
+        .guide-toggle:hover { background: var(--paper-3); }
+        .guide-toggle:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+        .guide-panel {
+            background: var(--teal-soft); border-radius: var(--r-xl);
+            padding: 26px 28px; margin-bottom: var(--sp-6);
+        }
+        .guide-panel[hidden] { display: none; }
+        .guide-title {
+            font-family: var(--font-display); font-weight: 700; font-size: 21px;
+            color: var(--teal-ink); margin: 0 0 var(--sp-2);
+        }
+        .guide-intro {
+            font-family: var(--font-sans); font-size: 14.5px; line-height: 1.55;
+            color: var(--teal-ink); margin: 0 0 var(--sp-5);
+        }
+        .guide-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 22px;
+        }
+        @media (max-width: 700px) { .guide-grid { grid-template-columns: 1fr; } }
+        .guide-item {
+            display: flex; align-items: baseline; gap: 12px;
+            font-family: var(--font-sans); font-size: 14px; line-height: 1.5;
+            color: var(--teal-ink);
+        }
+        .guide-item > code {
+            font-family: var(--font-mono); font-size: 13px; white-space: nowrap;
+            background: var(--surface); color: var(--ink);
+            padding: 2px 8px; border-radius: var(--r-xs); flex: 0 0 auto;
+        }
+        .guide-item span code {
+            font-family: var(--font-mono); font-size: 0.92em;
+            background: var(--surface); padding: 1px 5px; border-radius: var(--r-xs);
+        }
     </style>
 </head>
 <body class="edu">
@@ -100,7 +142,22 @@
             <p class="edu-overline">Interactive tool · markdown</p>
             <h1 class="app-title">Markdown Editor</h1>
             <p class="edu-lead">Write markdown on the left, watch it render live on the right, and download the result as a PDF.</p>
+            <button id="guide-toggle" class="guide-toggle" aria-expanded="true" aria-controls="guide">Hide markdown basics</button>
         </header>
+        <section id="guide" class="guide-panel" aria-label="Markdown basics">
+            <h2 class="guide-title">Markdown in 60 seconds</h2>
+            <p class="guide-intro">Markdown formats plain text with a few simple symbols. Type the code on the left of each pair to get the result on the right.</p>
+            <div class="guide-grid">
+                <div class="guide-item"><code># Heading</code><span>a big heading — use <code>##</code> or <code>###</code> for smaller ones</span></div>
+                <div class="guide-item"><code>**bold**</code><span>makes text <strong>bold</strong></span></div>
+                <div class="guide-item"><code>*italic*</code><span>makes text <em>italic</em></span></div>
+                <div class="guide-item"><code>- item</code><span>a bulleted list — <code>1.</code> for a numbered one</span></div>
+                <div class="guide-item"><code>[title](url)</code><span>a clickable link</span></div>
+                <div class="guide-item"><code>![alt](url)</code><span>an embedded image</span></div>
+                <div class="guide-item"><code>&gt; quote</code><span>a blockquote</span></div>
+                <div class="guide-item"><code>`code`</code><span>inline code — <code>```</code> for a code block</span></div>
+            </div>
+        </section>
         <section class="workspace">
             <div class="pane">
                 <div class="pane-head">Markdown input</div>
@@ -257,6 +314,15 @@ That's it! You now know the basics of Markdown. Happy writing!
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
             html2pdf().set(opt).from(element).save();
+        });
+
+        const guideToggle = document.getElementById('guide-toggle');
+        const guidePanel = document.getElementById('guide');
+        guideToggle.addEventListener('click', () => {
+            const opening = guidePanel.hasAttribute('hidden');
+            guidePanel.toggleAttribute('hidden', !opening);
+            guideToggle.setAttribute('aria-expanded', String(opening));
+            guideToggle.textContent = opening ? 'Hide markdown basics' : 'Show markdown basics';
         });
 
         // Initial render
