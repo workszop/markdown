@@ -127,6 +127,76 @@
             font-family: var(--font-mono); font-size: 0.92em;
             background: var(--surface); padding: 1px 5px; border-radius: var(--r-xs);
         }
+
+        /* --- CodeMirror: edulab dark data panel --- */
+        .CodeMirror {
+            height: 100%; background: var(--ink); color: var(--paper);
+            font-family: var(--font-mono); font-size: 14px; line-height: 1.55;
+            padding: 6px 0;
+        }
+        .CodeMirror-gutters {
+            background: var(--ink); border-right: 1px solid rgba(251,247,240,.10);
+        }
+        .CodeMirror-linenumber { color: rgba(251,247,240,.35); font-family: var(--font-mono); }
+        .CodeMirror-cursor { border-left: 2px solid var(--marigold); }
+        .CodeMirror-selected { background: rgba(251,247,240,.14); }
+        .CodeMirror-focused .CodeMirror-selected { background: rgba(232,146,12,.30); }
+        .cm-s-default .cm-header { color: var(--marigold); font-weight: 700; }
+        .cm-s-default .cm-strong { color: var(--paper); font-weight: 700; }
+        .cm-s-default .cm-em { color: var(--coral-soft); font-style: italic; }
+        .cm-s-default .cm-link { color: var(--sky-soft); }
+        .cm-s-default .cm-url { color: var(--sky-soft); opacity: .75; }
+        .cm-s-default .cm-quote { color: var(--marigold-soft); }
+        .cm-s-default .cm-comment { color: var(--teal-soft); }
+        .cm-s-default .cm-variable-2 { color: var(--paper); }
+        .cm-s-default .cm-hr { color: var(--ink-3); }
+
+        /* --- Rendered output prose --- */
+        .output h1, .output h2, .output h3, .output h4 {
+            font-family: var(--font-display); color: var(--ink);
+            line-height: 1.15; margin: 1.2em 0 .45em;
+        }
+        .output h1:first-child { margin-top: 0; }
+        .output h1 { font-size: 28px; font-weight: 700; letter-spacing: -.02em; }
+        .output h2 { font-size: 22px; font-weight: 600; letter-spacing: -.015em; }
+        .output h3 { font-size: 18px; font-weight: 600; }
+        .output h4 { font-size: 16px; font-weight: 700; font-family: var(--font-sans); }
+        .output p, .output li {
+            font-family: var(--font-sans); font-size: 15px; line-height: 1.6; color: var(--ink-2);
+        }
+        .output a { color: var(--teal); text-decoration-color: var(--teal-soft); }
+        .output a:hover { color: var(--teal-600); }
+        .output img { max-width: 100%; border-radius: var(--r-md); }
+        .output blockquote {
+            margin: 1em 0; padding: 10px 18px;
+            border-left: 3px solid var(--teal); background: var(--teal-soft);
+            border-radius: 0 var(--r-sm) var(--r-sm) 0; color: var(--teal-ink);
+        }
+        .output blockquote p { color: var(--teal-ink); margin: .3em 0; }
+        .output code {
+            font-family: var(--font-mono); font-size: .9em; color: var(--ink);
+            background: var(--paper-3); padding: .12em .4em; border-radius: var(--r-xs);
+        }
+        .output pre {
+            background: var(--paper-2); border: 1px solid var(--line);
+            border-radius: var(--r-md); padding: 14px 18px; overflow-x: auto;
+        }
+        .output pre code { background: none; padding: 0; font-size: 13px; line-height: 1.55; }
+        .output hr { border: none; border-top: 1px solid var(--line-2); margin: 1.6em 0; }
+        .output table { border-collapse: collapse; margin: 1em 0; font-family: var(--font-sans); font-size: 14px; }
+        .output th {
+            font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
+            letter-spacing: .08em; color: var(--ink-3); text-align: left;
+        }
+        .output th, .output td { border: 1px solid var(--line); padding: 8px 14px; color: var(--ink-2); }
+        .output tr:nth-child(even) td { background: var(--paper); }
+
+        /* --- highlight.js tokens on paper-2 wells --- */
+        .output .hljs-keyword, .output .hljs-built_in { color: var(--teal-ink); }
+        .output .hljs-string { color: var(--marigold-ink); }
+        .output .hljs-title, .output .hljs-function { color: var(--sky-ink); }
+        .output .hljs-comment { color: var(--ink-3); font-style: italic; }
+        .output .hljs-number, .output .hljs-literal { color: var(--coral-ink); }
     </style>
 </head>
 <body class="edu">
